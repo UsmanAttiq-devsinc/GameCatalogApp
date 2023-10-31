@@ -1,18 +1,19 @@
 package com.gameCatalog.authservice.Exception;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+@Getter
 public class AuthenticationException extends RuntimeException {
-    private HttpStatus httpStatus;
+    private final HttpStatus httpStatus;
 
-    private String errorMessage;
+    private final String errorMessage;
 
     public AuthenticationException(HttpStatus httpStatus, String errorMessage){
         this.httpStatus=httpStatus;
         this.errorMessage=errorMessage;
     }
 
-    public  HttpStatus getHttpStatus(){return httpStatus;};
+    ;
 
-    public String getErrorMessage(){return errorMessage;}
 }
