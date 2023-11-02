@@ -34,6 +34,11 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest registerRequest){
+
+        if (repository.existsByEmail(registerRequest.getEmail())) {
+            throw new AuthenticationException(HttpStatus.BAD_REQUEST, "Email is already in use");
+        }
+
         var user= User.builder()
                 .firstname(registerRequest.getFirstname())
                 .lastname(registerRequest.getLastname())
@@ -41,6 +46,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .role(Role.USER)
                 .build();
+
         repository.save(user);
         var jwtToken= jwtService.generateToken(user);
         var refreshToken= refreshTokenService.createRefreshToken(user.getEmail());
