@@ -1,0 +1,27 @@
+version: "3.7"
+services:    
+  mysqldb:
+    image: "mysql:5.7"
+    restart: always
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_DATABASE: CRUD_repo
+      MYSQL_USER: java
+      MYSQL_PASSWORD: java
+      MYSQL_ROOT_PASSWORD: root
+      
+  auth_service:
+    image: "usmanattiq/game-catalog-auth-service:latest"
+    deploy:
+      mode: replicated
+      replicas: 3
+    restart: always
+    ports:
+      - 8090-8092:8090
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/CRUD_repo?autoReconnect=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      - mysqldb
